@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Predict Flood Risk | AquaSentinel{% endblock %}{% block content %}
+<div class="mb-4"><div class="eyebrow dark">MACHINE LEARNING</div><h1 class="page-title">Predict flood risk</h1><p class="text-secondary">Enter environmental conditions for the location you want to assess.</p></div>
+<div class="row g-4"><div class="col-lg-8"><div class="panel"><form method="post">
+<div class="mb-3"><label class="form-label">Location name</label><input class="form-control" name="location" placeholder="e.g., River Zone A"></div>
+<div class="row g-3">
+{% for name,label,unit,placeholder in [('rainfall_mm','Rainfall','mm','e.g. 85'),('water_level_m','Water level','metres','e.g. 2.4'),('humidity_pct','Humidity','%','e.g. 82'),('temperature_c','Temperature','°C','e.g. 27'),('elevation_m','Elevation above sea level','metres','e.g. 35')] %}
+<div class="col-md-6"><label class="form-label">{{ label }} ({{ unit }})</label><input class="form-control" type="number" name="{{ name }}" step="any" required placeholder="{{ placeholder }}" {% if name=='rainfall_mm' %}min="0" max="1000"{% elif name=='water_level_m' %}min="0" max="30"{% elif name=='humidity_pct' %}min="0" max="100"{% elif name=='temperature_c' %}min="-10" max="60"{% else %}min="0" max="9000"{% endif %}></div>
+{% endfor %}
+<div class="col-md-6"><label class="form-label">Previous flood occurrence?</label><select class="form-select" name="previous_flood" required><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+</div><button class="btn btn-primary btn-lg mt-4">Analyze flood risk →</button></form></div></div>
+<div class="col-lg-4"><div class="panel tip-panel"><div class="feature-icon">💡</div><h5>Before you predict</h5><ul><li>Use consistent units.</li><li>Use observed or trusted forecast values when available.</li><li>Elevation should be metres above sea level.</li><li>Previous flood: 1 = yes, 0 = no.</li></ul><div class="alert alert-warning small mb-0">This prototype is not an official warning service.</div></div></div></div>{% endblock %}

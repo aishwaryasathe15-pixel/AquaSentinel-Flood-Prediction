@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AquaSentinel AI{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark nav-main">
+  <div class="container"><a class="navbar-brand fw-bold" href="{{ url_for('home') }}">🌊 AquaSentinel <span>AI</span></a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav"><div class="navbar-nav ms-auto">
+      {% if session.get('user_id') %}
+      <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a><a class="nav-link" href="{{ url_for('predict') }}">Predict Risk</a>
+      <a class="nav-link" href="{{ url_for('upload') }}">Upload Data</a><a class="nav-link" href="{{ url_for('history') }}">History</a>
+      <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ session.get('username') }})</a>
+      {% else %}<a class="nav-link" href="{{ url_for('about') }}">About</a><a class="nav-link" href="{{ url_for('login') }}">Login</a><a class="btn btn-light btn-sm ms-lg-2" href="{{ url_for('register') }}">Create account</a>{% endif %}
+    </div></div>
+  </div>
+</nav>
+<main class="container py-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}
+  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}{% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="footer mt-5"><div class="container py-4 d-flex flex-column flex-md-row justify-content-between gap-2"><span>🌊 AquaSentinel AI · Academic prototype</span><span>Predictions are estimates, not official emergency alerts.</span></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body></html>

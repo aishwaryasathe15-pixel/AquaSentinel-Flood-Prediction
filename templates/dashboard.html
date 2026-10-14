@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Dashboard | AquaSentinel{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4"><div><div class="eyebrow dark">OVERVIEW</div><h1 class="page-title">Welcome, {{ username }} 👋</h1><p class="text-secondary mb-0">Historical environmental data at a glance.</p></div><a class="btn btn-primary" href="{{ url_for('predict') }}">＋ New prediction</a></div>
+<div class="row g-3 mb-4"><div class="col-sm-6 col-xl-3"><div class="metric"><span>Predictions made</span><strong>{{ total }}</strong><small>In your account</small></div></div>
+<div class="col-sm-6 col-xl-3"><div class="metric"><span>Dataset records shown</span><strong>{{ data_rows }}</strong><small>Latest observations</small></div></div>
+<div class="col-sm-6 col-xl-3"><div class="metric"><span>High-risk records</span><strong>{{ counts.get('High',0) }}</strong><small>In displayed dataset</small></div></div>
+<div class="col-sm-6 col-xl-3"><div class="metric"><span>Extreme-risk records</span><strong>{{ counts.get('Extreme',0) }}</strong><small>In displayed dataset</small></div></div></div>
+<div class="row g-4"><div class="col-lg-8"><div class="panel"><div class="panel-head"><div><h5>Rainfall trend</h5><p>Rainfall in millimetres</p></div><span class="mini-tag">HISTORY</span></div><canvas id="rainChart" height="110"></canvas></div></div>
+<div class="col-lg-4"><div class="panel h-100"><div class="panel-head"><div><h5>Risk distribution</h5><p>Labelled records</p></div></div><canvas id="riskChart"></canvas><div class="legend-note">Categories in the current dataset</div></div></div>
+<div class="col-12"><div class="panel"><div class="panel-head"><div><h5>Water level history</h5><p>Water level in metres</p></div></div><canvas id="waterChart" height="80"></canvas></div></div>
+<div class="col-12"><div class="panel"><div class="panel-head"><div><h5>Recent predictions</h5><p>Your latest model results</p></div><a href="{{ url_for('history') }}">View all →</a></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Date/time</th><th>Location</th><th>Rainfall</th><th>Water level</th><th>Estimated risk</th></tr></thead><tbody>
+{% for p in predictions %}<tr><td>{{ p['created_at'][:16].replace('T',' ') }}</td><td>{{ p['location'] }}</td><td>{{ p['rainfall_mm'] }} mm</td><td>{{ p['water_level_m'] }} m</td><td><span class="risk-pill risk-{{ p['risk']|lower }}">{{ p['risk'] }}</span></td></tr>{% else %}<tr><td colspan="5" class="text-secondary text-center py-4">No predictions yet. Start with “New prediction”.</td></tr>{% endfor %}
+</tbody></table></div></div></div></div>
+<div class="alert alert-info mt-4 mb-0">Charts describe the uploaded/demo dataset. Model results are estimates and should not replace official alerts.</div>
+{% endblock %}
+{% block scripts %}<script>
+const chartData={{ chart|tojson }};
+new Chart(document.getElementById('rainChart'),{type:'line',data:{labels:chartData.dates,datasets:[{label:'Rainfall (mm)',data:chartData.rainfall,borderColor:'#168aad',backgroundColor:'rgba(22,138,173,.12)',fill:true,tension:.28,pointRadius:0}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true}}}});
+new Chart(document.getElementById('waterChart'),{type:'line',data:{labels:chartData.dates,datasets:[{label:'Water level (m)',data:chartData.water,borderColor:'#4f46e5',backgroundColor:'rgba(79,70,229,.12)',fill:true,tension:.25,pointRadius:0}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8}},y:{beginAtZero:true}}}});
+new Chart(document.getElementById('riskChart'),{type:'doughnut',data:{labels:chartData.riskLabels,datasets:[{data:chartData.risks,backgroundColor:['#2a9d8f','#e9c46a','#f4a261','#e76f51'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom'}}}});
+</script>{% endblock %}

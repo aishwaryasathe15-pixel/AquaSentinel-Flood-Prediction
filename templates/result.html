@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Prediction result | AquaSentinel{% endblock %}{% block content %}
+<div class="result-wrap"><div class="result-card"><div class="feature-icon">🌊</div><div class="eyebrow dark">MODEL ESTIMATE</div><h1 class="page-title">Flood risk result</h1><p class="text-secondary">{{ location }}</p>
+<div class="risk-banner risk-bg-{{ risk|lower }}"><span>Estimated risk</span><strong>{{ risk }}</strong><small>Model confidence indicator: {{ (probability*100)|round(1) }}% for the predicted class</small></div>
+{% if risk in ['High','Extreme'] %}<div class="alert alert-danger text-start mt-3"><strong>Elevated risk indication</strong><br>Follow official local authority and weather-service updates, avoid flooded roads and waterways, and prepare essential items. This result alone cannot confirm a flood.</div>
+{% elif risk == 'Medium' %}<div class="alert alert-warning text-start mt-3"><strong>Stay aware</strong><br>Monitor rainfall and official forecasts. Review local routes and emergency contacts.</div>
+{% else %}<div class="alert alert-success text-start mt-3"><strong>Lower estimated risk</strong><br>Conditions can change quickly. Continue to follow official weather and local authority guidance.</div>{% endif %}
+<h5 class="text-start mt-4">Input summary</h5><div class="table-responsive"><table class="table text-start"><tbody>
+{% for key,val in values.items() %}<tr><th>{{ key.replace('_',' ')|title }}</th><td>{{ val }}</td></tr>{% endfor %}
+</tbody></table></div><div class="d-flex gap-2 flex-wrap"><a class="btn btn-primary" href="{{ url_for('predict') }}">New prediction</a><a class="btn btn-outline-primary" href="{{ url_for('dashboard') }}">Dashboard</a></div></div></div>{% endblock %}

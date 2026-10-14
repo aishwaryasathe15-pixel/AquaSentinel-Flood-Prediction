@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}AquaSentinel AI | Flood Risk{% endblock %}
+{% block content %}
+<section class="hero p-4 p-lg-5 rounded-4">
+ <div class="row align-items-center g-4"><div class="col-lg-7"><span class="eyebrow">AI-POWERED ENVIRONMENTAL INSIGHTS</span>
+ <h1 class="display-4 fw-bold mt-3">See the risk.<br><span>Prepare earlier.</span></h1>
+ <p class="lead mt-3">Analyze historical environmental data and estimate flood-risk categories with a machine-learning website.</p>
+ <div class="d-flex gap-2 flex-wrap mt-4"><a class="btn btn-info btn-lg" href="{{ url_for('register') }}">Get started →</a><a class="btn btn-outline-light btn-lg" href="{{ url_for('about') }}">How it works</a></div>
+ </div><div class="col-lg-5"><div class="hero-visual"><div class="wave">〰</div><div class="circle c1"></div><div class="circle c2"></div><div class="hero-stat"><small>RISK CLASSIFICATION</small><h3>Low · Medium<br>High · Extreme</h3><span>Historical-data model</span></div></div></div></div>
+</section>
+<div class="row g-3 mt-3">{% for icon,title,desc in [('🧠','Machine learning','Random Forest classification trained on labelled historical data.'),('📈','Visual analytics','Explore rainfall, water-level trends, and risk distribution.'),('🔔','Risk guidance','See general preparedness tips when a higher risk is estimated.') ] %}
+<div class="col-md-4"><div class="feature-card h-100"><div class="feature-icon">{{ icon }}</div><h5>{{ title }}</h5><p class="text-secondary mb-0">{{ desc }}</p></div></div>{% endfor %}</div>
+<div class="alert alert-warning mt-4 mb-0"><strong>Demo limitation:</strong> the included dataset is synthetic. This academic prototype is not an official flood-warning system.</div>
+{% endblock %}

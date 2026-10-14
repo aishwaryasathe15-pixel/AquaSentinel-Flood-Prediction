@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Upload data | AquaSentinel{% endblock %}{% block content %}
+<div class="mb-4"><div class="eyebrow dark">YOUR DATA</div><h1 class="page-title">Upload historical data</h1><p class="text-secondary">Use CSV observations to visualize your data and optionally retrain the model.</p></div>
+<div class="row g-4"><div class="col-lg-7"><div class="panel"><form method="post" enctype="multipart/form-data"><label class="form-label">Select CSV file</label><input class="form-control mb-3" type="file" name="dataset" accept=".csv" required><button class="btn btn-primary">Upload dataset</button></form>
+<hr><a href="{{ url_for('sample_data') }}">↓ Download sample dataset (CSV)</a></div></div>
+<div class="col-lg-5"><div class="panel"><h5>Required columns for retraining</h5><p class="text-secondary small">The target column is necessary to teach the model which risk occurred in each historical row.</p><code>rainfall_mm</code><br><code>water_level_m</code><br><code>humidity_pct</code><br><code>temperature_c</code><br><code>elevation_m</code><br><code>previous_flood</code><br><code>flood_risk</code>
+<p class="small mt-3 mb-0">Target labels: Low, Medium, High, Extreme. At least 20 valid rows and 2 categories are required. Without <code>flood_risk</code>, the CSV is saved for visualization only.</p></div></div></div>
+<div class="alert alert-warning mt-4">Use real, correctly labelled historical records for meaningful evaluation. The bundled data is synthetic demo data. Uploads are stored locally on this computer.</div>{% endblock %}
